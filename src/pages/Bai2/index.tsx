@@ -17,7 +17,7 @@ export default function Bai2() {
 
   return (
     <div style={{ padding: 24 }}>
-      <h1>Ngân hàng câu hỏi</h1>
+      <h1>Hệ thống quản lý ngân hàng câu hỏi</h1>
 
       <Tabs defaultActiveKey="1">
         <TabPane tab="Khối kiến thức" key="1">
