@@ -1,86 +1,86 @@
-import React, { useState } from "react";
-import { Card, Input, Button, Typography } from "antd";
+import { useState } from "react";
 
-const { Title, Text } = Typography;
+type Choice = "Kéo" | "Búa" | "Bao";
 
-export default function Bai1() {
-  // Sinh số ngẫu nhiên 1-100 khi bắt đầu
-  const [randomNumber, setRandomNumber] = useState(
-    Math.floor(Math.random() * 100) + 1
-  );
+interface History {
+  player: Choice;
+  computer: Choice;
+  result: string;
+}
 
-  const [guess, setGuess] = useState("");
-  const [message, setMessage] = useState("");
-  const [remainingTurns, setRemainingTurns] = useState(10);
-  const [isGameOver, setIsGameOver] = useState(false);
+const choices: Choice[] = ["Kéo", "Búa", "Bao"];
 
-  const handleGuess = () => {
-    if (!guess || isGameOver) return;
+export default function App() {
+  const [history, setHistory] = useState<History[]>([]);
 
-    const userNumber = parseInt(guess);
-
-    // Nếu đã hết lượt
-    if (remainingTurns === 1 && userNumber !== randomNumber) {
-      setMessage(`Bạn đã hết lượt! Số đúng là ${randomNumber}`);
-      setRemainingTurns(0);
-      setIsGameOver(true);
-      return;
-    }
-
-    if (userNumber === randomNumber) {
-      setMessage("Chúc mừng! Bạn đã đoán đúng!");
-      setIsGameOver(true);
-    } else if (userNumber < randomNumber) {
-      setMessage("Bạn đoán quá thấp!");
-      setRemainingTurns(remainingTurns - 1);
-    } else {
-      setMessage("Bạn đoán quá cao!");
-      setRemainingTurns(remainingTurns - 1);
-    }
-
-    setGuess("");
+  const getComputerChoice = (): Choice => {
+    const random = Math.floor(Math.random() * choices.length);
+    return choices[random];
   };
 
-  const handleReset = () => {
-    setRandomNumber(Math.floor(Math.random() * 100) + 1);
-    setGuess("");
-    setMessage("");
-    setRemainingTurns(10);
-    setIsGameOver(false);
+  const getResult = (player: Choice, computer: Choice): string => {
+    if (player === computer) return "Hòa";
+
+    if (
+      (player === "Kéo" && computer === "Bao") ||
+      (player === "Búa" && computer === "Kéo") ||
+      (player === "Bao" && computer === "Búa")
+    ) {
+      return "Thắng";
+    }
+
+    return "Thua";
+  };
+
+  const playGame = (playerChoice: Choice) => {
+    const computerChoice = getComputerChoice();
+    const result = getResult(playerChoice, computerChoice);
+
+    const newRound: History = {
+      player: playerChoice,
+      computer: computerChoice,
+      result: result,
+    };
+
+    setHistory([newRound, ...history]);
   };
 
   return (
-    <Card style={{ maxWidth: 500 }}>
-      <Title level={3}>Trò Chơi Đoán Số</Title>
+    <div style={{ padding: "20px", fontFamily: "Arial" }}>
+      <h1>Trò chơi Oẳn Tù Tì</h1>
 
-      <Text>Hệ thống đã chọn một số từ 1 đến 100.</Text>
-      <br /><br />
+      <div>
+        {choices.map((choice) => (
+          <button
+            key={choice}
+            onClick={() => playGame(choice)}
+            style={{ margin: "10px", padding: "10px 20px" }}
+          >
+            {choice}
+          </button>
+        ))}
+      </div>
 
-      <Input
-        type="number"
-        placeholder="Nhập số bạn đoán..."
-        value={guess}
-        onChange={(e) => setGuess(e.target.value)}
-        disabled={isGameOver}
-      />
+      <h2>Lịch sử ván đấu</h2>
 
-      <br /><br />
-
-      <Button type="primary" onClick={handleGuess} disabled={isGameOver}>
-        Đoán
-      </Button>
-
-      <Button style={{ marginLeft: 10 }} onClick={handleReset}>
-        Chơi lại
-      </Button>
-
-      <br /><br />
-
-      <Text strong>Số lượt còn lại: {remainingTurns}</Text>
-
-      <br /><br />
-
-      <Text>{message}</Text>
-    </Card>
+      <table border={1} cellPadding={10}>
+        <thead>
+          <tr>
+            <th>Người chơi</th>
+            <th>Máy</th>
+            <th>Kết quả</th>
+          </tr>
+        </thead>
+        <tbody>
+          {history.map((round, index) => (
+            <tr key={index}>
+              <td>{round.player}</td>
+              <td>{round.computer}</td>
+              <td>{round.result}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
