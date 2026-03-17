@@ -44,18 +44,13 @@
   // ===== BÀI TẬP =====
 
   {
-    path: '/bai-1',
-    name: 'Bài 1',
+    path: '/bai-th03',
+    name: 'Bài TH03',
     icon: 'BookOutlined',
-    component: './Bai1',
+    component: './BaiTH03',
   },
 
-  {
-    path: '/bai-2',
-    name: 'Bài 2',
-    icon: 'BookOutlined',
-    component: './Bai2',
-  },
+ 
 
   ///////////////////////////////////
   // ===== NOTIFICATION =====
