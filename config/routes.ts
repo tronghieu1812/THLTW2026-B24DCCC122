@@ -44,10 +44,10 @@
   // ===== BÀI TẬP =====
 
   {
-    path: '/bai-ktgk',
-    name: 'Bài KTGK',
+    path: '/bai-TH07',
+    name: 'Bài TH07',
     icon: 'BookOutlined',
-    component: './BaiKTGK',
+    component: './BaiTH07',
   },
 
  
